@@ -1,14 +1,15 @@
 typedef struct tag
 {
-    char[20] name;
+    char name[20];
     float value;
 } tag;
 
 typedef struct relic
 {
-    char[30] setname;
+    char setname[30];
+    char position[10];
     tag main_tag;
-    tag[4] normal_tags;
+    tag normal_tags[4];
     int level;
     int star;
 } relic;
