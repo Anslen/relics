@@ -10,19 +10,29 @@ relic* load_json(void);
 int main()
 {
     relic *relics;
+    int index = 0;
     puts("欢迎使用圣遗物评分工具");
     relics = load_json();
+    while(strcmp(relics[index].setname,"end") != 0)
+    {
+        //trans_tag(relics[index]);
+        //trans_setname(relics[index]);
+        index++;
+    }
+    free(relics);
+    return 0;
 }
 
 relic* load_json(void)
 {
     //载入json文件
-    char name[50];
+    char name[50] = "mona.json";
     FILE *file = NULL;
     puts("请输入json文件地址（由YAS生成，下载地址请查看README文件）");
     while(file == NULL)
     {
-        scanf("%s",name);
+        //debug
+        //scanf("%s",name);
         file = fopen(name,"r");
         if(file == NULL)
         {
@@ -56,11 +66,17 @@ relic* load_json(void)
 
     //解析json
     cJSON *json = cJSON_Parse(json_string);
+    //debug
+    FILE *fp;
+    fp = fopen("解析结果1.json","w");
+    fprintf(fp,"%s",cJSON_Print(json));
+    fclose(fp);
+    //debug
     cJSON *node = json -> child -> next;
     cJSON *json_ptr = node -> child;//1级指针
     cJSON *json_ptr1 = json_ptr -> child;//2级指针
     cJSON *json_ptr2 = NULL;//3级指针
-    relic *relics = malloc(1500 * sizeof(relic));
+    relic *relics = malloc(1501 * sizeof(relic));
     relic *relic_ptr;
     int index = 0;
     while(node != NULL)
@@ -101,6 +117,7 @@ relic* load_json(void)
         //导入下一项
         node = node -> next;
     }
+    strcpy(relics[index].setname,"end");
     cJSON_Delete(json);
     return relics;
 }
