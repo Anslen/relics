@@ -38,7 +38,7 @@ char* trans_posi(const char* string)
     }else
     {
         printf("部位名解析错误:%s\n",string);
-        exit(1)
+        exit(1);
     }
 }
 

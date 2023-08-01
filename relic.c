@@ -15,8 +15,13 @@ int main()
     relics = load_json();
     while(strcmp(relics[index].setname,"end") != 0)
     {
-        //trans_tag(relics[index]);
-        //trans_setname(relics[index]);
+        trans_tag(relics[index].main_tag.name);
+        int count = 0;
+        while(strcmp(relics[index].normal_tags[count].name,"end") != 0)
+        {
+            trans_tag(relics[index].normal_tags[count].name);
+        }
+        trans_setname(relics[index].setname);
         index++;
     }
     free(relics);
@@ -31,8 +36,8 @@ relic* load_json(void)
     puts("请输入json文件地址（由YAS生成，下载地址请查看README文件）");
     while(file == NULL)
     {
-        //debug
-        //scanf("%s",name);
+
+        scanf("%s",name);
         file = fopen(name,"r");
         if(file == NULL)
         {
@@ -66,12 +71,6 @@ relic* load_json(void)
 
     //解析json
     cJSON *json = cJSON_Parse(json_string);
-    //debug
-    FILE *fp;
-    fp = fopen("解析结果1.json","w");
-    fprintf(fp,"%s",cJSON_Print(json));
-    fclose(fp);
-    //debug
     cJSON *node = json -> child -> next;
     cJSON *json_ptr = node -> child;//1级指针
     cJSON *json_ptr1 = json_ptr -> child;//2级指针
