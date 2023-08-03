@@ -5,7 +5,7 @@
 typedef struct tag
 {
     char name[20];
-    float value;
+    double value;
 } tag;
 
 typedef struct relic
@@ -161,6 +161,24 @@ char* trans_setname(const char* string)
     }else if(strcmp(string,"braveHeart") == 0)
     {
         return "勇者之心";
+    }else if(strcmp(string,"prayersToSpringtime") == 0)
+    {
+        return "祭冰之人";
+    }else if(strcmp(string,"tinyMiracle") == 0)
+    {
+        return "奇迹";
+    }else if(strcmp(string,"gambler") == 0)
+    {
+        return "赌徒";
+    }else if(strcmp(string,"martialArtist") == 0)
+    {
+        return "武人";
+    }else if(strcmp(string,"defenderWill") == 0)
+    {
+        return "守护之心";
+    }else if(strcmp(string,"prayersForDestiny") == 0)
+    {
+        return "祭水之人";
     }
     else
     {
