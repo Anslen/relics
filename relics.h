@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct tag
 {
@@ -16,6 +17,7 @@ typedef struct relic
     tag normal_tags[4];
     int level;
     int star;
+    float weight;
 } relic;
 
 char* trans_posi(const char* string)
@@ -25,16 +27,16 @@ char* trans_posi(const char* string)
         return "生之花";
     }else if(strcmp(string,"feather") == 0)
     {
-        return "羽毛";
+        return "死之羽";
     }else if(strcmp(string,"sand") == 0)
     {
-        return "沙漏";
+        return "时之沙";
     }else if(strcmp(string,"cup") == 0)
     {
-        return "杯子";
+        return "空之杯";
     }else if(strcmp(string,"head") == 0)
     {
-        return "时之冠";
+        return "理之冠";
     }else
     {
         printf("部位名解析失败:%s\n",string);
@@ -253,13 +255,58 @@ char* trans_tag(const char* string)
     }
 }
 
+bool is_percent(char *string)
+{
+    //判断词条是否为百分比类型
+    //是百分比类型时返回True,否则返回False
+    if(strcmp(string,"critical")==0 || strcmp(string,"criticalDamage")==0 ||
+    strcmp(string,"cureEffect")==0)//暴击，爆伤，治疗加成
+        return true;
+    if(strcmp(string + strlen(string) - 10,"Percentage") == 0)//生命、攻击、防御百分比
+        return true;
+    if(strcmp(string + strlen(string) - 5,"Bonus") == 0)//元素加伤
+        return true;
+    return false;
+}
+
 void relic_print(relic *rlc)
 {
     //显示圣遗物信息
-    printf("%s %s+%d\n",trans_setname(rlc -> setname),trans_posi(rlc -> position),rlc -> level);
+    printf("%d星%s %s+%d\n",rlc->star,trans_setname(rlc->setname),trans_posi(rlc->position),rlc->level);
+    if(is_percent(rlc->main_tag.name))
+        printf("%s%.3lf\n",trans_tag(rlc->main_tag.name),rlc->main_tag.value);
+    else
+        printf("%s%d\n",trans_tag(rlc->main_tag.name),(int)rlc->main_tag.value);
+    int index = 0;
+    printf("  ");
+    while(strcmp(rlc->normal_tags[index].name,"end") != 0 && index < 4)
+    {
+        if(is_percent(rlc->normal_tags[index].name))
+            printf("%s%.3lf ",trans_tag(rlc->normal_tags[index].name),rlc->normal_tags[index].value);
+        else
+            printf("%s%.d ",trans_tag(rlc->normal_tags[index].name),(int)rlc->normal_tags[index].value);
+        index++;
+    }
+    printf("\n\n");
 }
 
 void relic_print_short(relic *rlc)
 {
-
+    //以缩略方式显示圣遗物信息
+    printf("%d星%s %s+%d ",rlc->star,trans_setname(rlc->setname),trans_posi(rlc->position),rlc->level);
+    if(is_percent(rlc->main_tag.name))
+        printf("%s%.3lf",trans_tag(rlc->main_tag.name),rlc->main_tag.value);
+    else
+        printf("%s%d",trans_tag(rlc->main_tag.name),(int)rlc->main_tag.value);
+    int index = 0;
+    printf("  ||  ");
+    while(strcmp(rlc->normal_tags[index].name,"end") != 0 && index < 4)
+    {
+        if(is_percent(rlc->normal_tags[index].name))
+            printf("%s%.3lf ",trans_tag(rlc->normal_tags[index].name),rlc->normal_tags[index].value);
+        else
+            printf("%s%.d ",trans_tag(rlc->normal_tags[index].name),(int)rlc->normal_tags[index].value);
+        index++;
+    }
+    putchar('\n');
 }

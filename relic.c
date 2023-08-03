@@ -64,15 +64,17 @@ relic alys_relic(cJSON *rlc)
     //¸±´ÊÌõ
     ptr_entry = ptr_entry -> next;
     ptr_tag = ptr_entry -> child;
+    int index = 0;
     while(ptr_tag != NULL)
     {
-        int index = 0;
         ptr_inner = ptr_tag -> child;
         strcpy(export.normal_tags[index].name,ptr_inner->valuestring);
         ptr_inner = ptr_inner -> next;
         export.normal_tags[index].value = ptr_inner -> valuedouble;
+        index++;
         ptr_tag = ptr_tag -> next;
     }
+    if(index != 4) strcpy(export.normal_tags[index].name,"end");
     ptr_entry = ptr_entry -> next -> next;
     export.level = ptr_entry -> valueint;
     ptr_entry = ptr_entry -> next;
