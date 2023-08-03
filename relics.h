@@ -37,8 +37,7 @@ char* trans_posi(const char* string)
         return "时之冠";
     }else
     {
-        printf("部位名解析错误:%s\n",string);
-        exit(1);
+        printf("部位名解析失败:%s\n",string);
     }
 }
 
@@ -183,13 +182,13 @@ char* trans_setname(const char* string)
     else
     {
         printf("套装名解析失败:%s\n",string);
-        exit(1);
     }
 }
 
 char* trans_tag(const char* string)
 {
     //转换词条名为中文
+    if(string == NULL) return 0;
     //普通词条
     if(strcmp(string,"lifeStatic") == 0)
     {
@@ -251,7 +250,6 @@ char* trans_tag(const char* string)
     else
     {
         printf("词条名解析失败:%s",string);
-        exit(1);
     }
 }
 
