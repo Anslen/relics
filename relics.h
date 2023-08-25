@@ -5,14 +5,14 @@
 
 typedef struct tag
 {
-    char name[20];
+    char name[11];
     double value;
 } tag;
 
 typedef struct relic
 {
-    char setname[30];
-    char position[10];
+    char setname[10];
+    char position[7];
     tag main_tag;
     tag normal_tags[4];
     int level;
@@ -45,6 +45,7 @@ char* trans_posi(const char* string)
 
 char* trans_setname(const char* string)
 {
+    //英文和中文的圣遗物名对应关系
     if(strcmp(string,"VourukashasGlow") == 0)
     {
         return "花海甘露";
@@ -248,6 +249,9 @@ char* trans_tag(const char* string)
     }else if(strcmp(string,"rockBonus") == 0)
     {
         return "岩加伤";
+    }else if(strcmp(string,"physicalBonus") == 0)
+    {
+        return "物理加伤";
     }
     else
     {
@@ -255,36 +259,56 @@ char* trans_tag(const char* string)
     }
 }
 
+//记录百分比类型的tag
+const char percent_tag[][11] = {
+"百分比生命",
+"百分比攻击",
+"百分比防御",
+"暴击率",
+"暴击伤害",
+"治疗加成",
+"充能",
+"冰加伤",
+"火加伤",
+"水加伤",
+"风加伤",
+"雷加伤",
+"草加伤",
+"岩加伤",
+"物理加伤"};
+
 bool is_percent(char *string)
 {
     //判断词条是否为百分比类型
     //是百分比类型时返回True,否则返回False
-    if(strcmp(string,"critical")==0 || strcmp(string,"criticalDamage")==0 ||
-    strcmp(string,"cureEffect")==0)//暴击，爆伤，治疗加成
-        return true;
-    if(strcmp(string + strlen(string) - 10,"Percentage") == 0)//生命、攻击、防御百分比
-        return true;
-    if(strcmp(string + strlen(string) - 5,"Bonus") == 0)//元素加伤
-        return true;
+    const char* ptr = percent_tag[0];
+    //printf(" %d ",percent_tag[12] - percent_tag[0]);
+    while((ptr - percent_tag[0]) < (15 * 11))
+    {
+        if(strcmp(string,ptr) == 0 && strlen(string) == strlen(ptr))
+        {
+            return true;
+        }
+        ptr += 11;
+    }
     return false;
 }
 
 void relic_print(relic *rlc)
 {
     //显示圣遗物信息
-    printf("%d星%s %s+%d\n",rlc->star,trans_setname(rlc->setname),trans_posi(rlc->position),rlc->level);
+    printf("%d星%s %s+%d\n",rlc->star,rlc->setname,rlc->position,rlc->level);
     if(is_percent(rlc->main_tag.name))
-        printf("%s%.3lf\n",trans_tag(rlc->main_tag.name),rlc->main_tag.value);
+        printf("%s%.3lf\n",rlc->main_tag.name,rlc->main_tag.value);
     else
-        printf("%s%d\n",trans_tag(rlc->main_tag.name),(int)rlc->main_tag.value);
+        printf("%s%d\n",rlc->main_tag.name,(int)rlc->main_tag.value);
     int index = 0;
-    printf("  ");
     while(strcmp(rlc->normal_tags[index].name,"end") != 0 && index < 4)
     {
         if(is_percent(rlc->normal_tags[index].name))
-            printf("%s%.3lf ",trans_tag(rlc->normal_tags[index].name),rlc->normal_tags[index].value);
+            printf("%s%.3lf|",rlc->normal_tags[index].name,rlc->normal_tags[index].value);
         else
-            printf("%s%.d ",trans_tag(rlc->normal_tags[index].name),(int)rlc->normal_tags[index].value);
+            printf("%s%.d|",rlc->normal_tags[index].name,(int)rlc->normal_tags[index].value);
         index++;
     }
     printf("\n\n");
@@ -293,19 +317,20 @@ void relic_print(relic *rlc)
 void relic_print_short(relic *rlc)
 {
     //以缩略方式显示圣遗物信息
-    printf("%d星%s %s+%d ",rlc->star,trans_setname(rlc->setname),trans_posi(rlc->position),rlc->level);
+    printf("%d星%s %s+%d ",rlc->star,rlc->setname,rlc->position,rlc->level);
+    //printf("%s %d ",rlc->main_tag.name,is_percent(rlc->main_tag.name));
     if(is_percent(rlc->main_tag.name))
-        printf("%s%.3lf",trans_tag(rlc->main_tag.name),rlc->main_tag.value);
+        printf("%s%.3lf",rlc->main_tag.name,rlc->main_tag.value);
     else
-        printf("%s%d",trans_tag(rlc->main_tag.name),(int)rlc->main_tag.value);
+        printf("%s%d",rlc->main_tag.name,(int)rlc->main_tag.value);
     int index = 0;
-    printf("  ||  ");
+    printf("\t||");
     while(strcmp(rlc->normal_tags[index].name,"end") != 0 && index < 4)
     {
         if(is_percent(rlc->normal_tags[index].name))
-            printf("%s%.3lf ",trans_tag(rlc->normal_tags[index].name),rlc->normal_tags[index].value);
+            printf("%s%.3lf|",rlc->normal_tags[index].name,rlc->normal_tags[index].value);
         else
-            printf("%s%.d ",trans_tag(rlc->normal_tags[index].name),(int)rlc->normal_tags[index].value);
+            printf("%s%d|",rlc->normal_tags[index].name,(int)rlc->normal_tags[index].value);
         index++;
     }
     putchar('\n');

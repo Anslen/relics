@@ -52,13 +52,21 @@ relic alys_relic(cJSON *rlc)
     cJSON *ptr_entry = rlc -> child;//指向圣遗物中一个项
     cJSON *ptr_tag;//指向副词条
     cJSON *ptr_inner;//指向副词条内
-    strcpy(export.setname,ptr_entry->valuestring);
+    //套装名
+    char setname[30];
+    strcpy(setname,ptr_entry->valuestring);
+    strcpy(export.setname,trans_setname(setname));
+    //部位名
+    char position[10];
     ptr_entry = ptr_entry -> next;
-    strcpy(export.position,ptr_entry->valuestring);
+    strcpy(position,ptr_entry->valuestring);
+    strcpy(export.position,trans_posi(position));
     //主词条
+    char tag[20];
     ptr_entry = ptr_entry -> next;
     ptr_tag = ptr_entry -> child;
-    strcpy(export.main_tag.name,ptr_tag->valuestring);
+    strcpy(tag,ptr_tag->valuestring);
+    strcpy(export.main_tag.name,trans_tag(tag));
     ptr_tag = ptr_tag -> next;
     export.main_tag.value = ptr_tag -> valuedouble;
     //副词条
@@ -67,8 +75,10 @@ relic alys_relic(cJSON *rlc)
     int index = 0;
     while(ptr_tag != NULL)
     {
+        char sub_tag[20];
         ptr_inner = ptr_tag -> child;
-        strcpy(export.normal_tags[index].name,ptr_inner->valuestring);
+        strcpy(sub_tag,ptr_inner->valuestring);
+        strcpy(export.normal_tags[index].name,trans_tag(sub_tag));
         ptr_inner = ptr_inner -> next;
         export.normal_tags[index].value = ptr_inner -> valuedouble;
         index++;
