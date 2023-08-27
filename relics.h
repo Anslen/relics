@@ -1,3 +1,5 @@
+#ifndef INCLUDED
+#define INCLUDED 1
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -29,34 +31,34 @@ const char set_list[SET_NUM][10] = {
 "染血骑士",
 "昔日宗室",
 "流浪乐团",
-"角斗士",
+"角斗士  ",
 "祭雷之人",
-"学士",
+"学士    ",
 "祭火之人",
-"流放者",
-"教官",
-"战狂",
+"流放者  ",
+"教官    ",
+"战狂    ",
 "行者之心",
-"游医",
-"幸运儿",
-"冒险家",
+"游医    ",
+"幸运儿  ",
+"冒险家  ",
 "逆飞流星",
 "悠古磐岩",
 "勇者之心",
 "祭冰之人",
-"奇迹",
-"赌徒",
-"武人",
+"奇迹    ",
+"赌徒    ",
+"武人    ",
 "守护之心",
-"祭水之人"}
+"祭水之人"};
 
-typedef struct tag
+typedef struct
 {
     char name[11];
     double value;
 } tag;
 
-typedef struct relic
+typedef struct
 {
     char setname[10];
     char position[7];
@@ -382,3 +384,4 @@ void relic_print_short(relic *rlc)
     }
     putchar('\n');
 }
+#endif

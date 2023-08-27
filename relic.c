@@ -12,7 +12,7 @@ relic* load_json(char*);
 FILE* get_file(void);
 relic alys_relic(cJSON*);
 void set_setname(void);
-void set_sorce(void);
+//void set_sorce(void);
 relic* calc(relic*);
 
 //注意：该数组记录的是set_list中的索引值+1
@@ -33,6 +33,7 @@ int main(int argc,char** argv)
     {
         printf("1)筛选套装\t2)设置条件\t3)开始计算\t4)退出\n");
         scanf("%d",&code);
+        getchar();
         if(!(1 <= code <= QUIT_CODE))
         {
             printf("错误的指令，请重新输入\n");
@@ -44,8 +45,8 @@ int main(int argc,char** argv)
                 set_setname();
                 break;
 
-            case 2:
-                set_sorce();
+            /*case 2:
+                set_sorce();*/
 
             default:
                 break;
@@ -56,14 +57,17 @@ int main(int argc,char** argv)
     return 0;
 }
 
-void my_gets(restrict char* dest,int n)
+void my_gets(char* restrict dest,int n)
 {
     //获取n位输入
     fgets(dest,n,stdin);
     char ch = 0;
-    while(ch != '\n')
-    {
-        ch = getchar();
+    if(!strchr(dest,'\n'))
+        {
+        while(ch != '\n')
+        {
+            ch = getchar();
+        }
     }
 }
 
@@ -73,24 +77,26 @@ void set_setname(void)
     char input[5];
     int index = 0;
     int code = 0;
-    printf("输入需要套装的对应代码，输入help获取代码与套装名对应表格，输入quit退出\n");
-    my_gets(5);
     while(1)
     {
+        printf("输入需要套装的对应代码，输入help获取代码与套装名对应表格，输入quit退出\n");
+        my_gets(input,5);
         if(strcmp(input,"quit") == 0) break;
         if(strcmp(input,"help") == 0)
         {
-            for(int n = 1;n < SET_NUM; n++)
+            for(int n = 1;n <= SET_NUM; n++)
             {
-                printf("%d)%s ",n+1,set_list[n]);
+                printf("%d)%s\t",n,set_list[n-1]);
                 if((n % 5) == 0) putchar('\n');
-                continue;
             }
+            putchar('\n');
+            continue;
         }
         sscanf(input,"%d",&code);
         if(0< code <= SET_NUM)
         {
             min_score[index++] = code;
+            printf("%s添加成功\n",set_list[code-1]);
             code = 0;
             continue;
         }

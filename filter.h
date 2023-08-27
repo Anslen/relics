@@ -19,11 +19,11 @@ double score_critical(relic* input)
         {
             break;
         }
-        if(strcmp(input -> normal_tags[index].name),"±©»÷ÂÊ" == 0)
+        if(strcmp(input -> normal_tags[index].name,"±©»÷ÂÊ") == 0)
         {
             score += (input->normal_tags[index].value) * 2;
         }
-        if(strcmp(input -> normal_tags[index].name),"±©»÷ÉËº¦" == 0)
+        if(strcmp(input -> normal_tags[index].name,"±©»÷ÉËº¦") == 0)
         {
             score += input->normal_tags[index].value;
         }
