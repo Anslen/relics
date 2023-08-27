@@ -3,27 +3,99 @@
 #include <string.h>
 #include "cJSON.h"
 #include "relics.h"
+#include "filter.h"
 #define BUFF_SIZE 500000//缓冲区大小
+#define QUIT_CODE 4//主循环中用于退出的代码
 
+void my_gets(char*,int);
 relic* load_json(char*);
 FILE* get_file(void);
 relic alys_relic(cJSON*);
+void set_setname(void);
+void set_sorce(void);
+relic* calc(relic*);
+
+//注意：该数组记录的是set_list中的索引值+1
+int active_set[SET_NUM] = {0};//记录需要的圣遗物
 
 int main(int argc,char** argv)
 {
     relic *relics;
     int index = 0;
-    puts("欢迎使用RAA");
+    puts("欢迎使用RAA，输入对应数字使用指令");
     if(argc > 1)
         relics = load_json(argv[1]);
     else
         relics = load_json(NULL);
-    while(strcmp(relics[index].setname,"end") != 0)
+
+    int code = 0;
+    while(code != QUIT_CODE)
     {
-        relic_print(relics + index++);
+        printf("1)筛选套装\t2)设置条件\t3)开始计算\t4)退出\n");
+        scanf("%d",&code);
+        if(!(1 <= code <= QUIT_CODE))
+        {
+            printf("错误的指令，请重新输入\n");
+            continue;
+        }
+        switch (code)
+        {
+            case 1:
+                set_setname();
+                break;
+
+            case 2:
+                set_sorce();
+
+            default:
+                break;
+        }
     }
+    
     free(relics);
     return 0;
+}
+
+void my_gets(restrict char* dest,int n)
+{
+    //获取n位输入
+    fgets(dest,n,stdin);
+    char ch = 0;
+    while(ch != '\n')
+    {
+        ch = getchar();
+    }
+}
+
+void set_setname(void)
+{
+    //设置套装
+    char input[5];
+    int index = 0;
+    int code = 0;
+    printf("输入需要套装的对应代码，输入help获取代码与套装名对应表格，输入quit退出\n");
+    my_gets(5);
+    while(1)
+    {
+        if(strcmp(input,"quit") == 0) break;
+        if(strcmp(input,"help") == 0)
+        {
+            for(int n = 1;n < SET_NUM; n++)
+            {
+                printf("%d)%s ",n+1,set_list[n]);
+                if((n % 5) == 0) putchar('\n');
+                continue;
+            }
+        }
+        sscanf(input,"%d",&code);
+        if(0< code <= SET_NUM)
+        {
+            min_score[index++] = code;
+            code = 0;
+            continue;
+        }
+        printf("错误，请重新输入\n");
+    }
 }
 
 FILE* get_file(void)
@@ -95,6 +167,7 @@ relic alys_relic(cJSON *rlc)
 relic* load_json(char *name)
 {
     //载入json文件
+    //返回的指针需要手动释放内存
     FILE *file = NULL;
     file = fopen(name,"r");
     if(file == NULL)
