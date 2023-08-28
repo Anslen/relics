@@ -4,6 +4,8 @@
 #include "cJSON.h"
 #include "relics.h"
 #include "filter.h"
+#include "listnode.h"
+
 #define BUFF_SIZE 500000//缓冲区大小
 #define QUIT_CODE 4//主循环中用于退出的代码
 

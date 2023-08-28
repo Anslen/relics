@@ -1,12 +1,15 @@
+#ifndef FILTER_INCLUDED
+#define FILTER_INCLUDED 1
 #include "relics.h"
 #include <string.h>
-#define FILTER_NUM//筛选器的数量
+#define FILTER_NUM 1//筛选器的数量
 
 typedef double(*func)(relic*);
 double score_critical(relic*);
 
 func filters[FILTER_NUM] = {score_critical};
 double min_score[FILTER_NUM] = {0};//筛选最低得分
+char filter_name[FILTER_NUM][20] = {"双暴"};
 
 double score_critical(relic* input)
 {
@@ -31,3 +34,5 @@ double score_critical(relic* input)
     }
     return score;
 }
+
+#endif

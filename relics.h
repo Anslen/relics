@@ -1,5 +1,5 @@
-#ifndef INCLUDED
-#define INCLUDED 1
+#ifndef RELIC_INCLUDED
+#define RELIC_INCLUDED 1
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -52,13 +52,13 @@ const char set_list[SET_NUM][10] = {
 "守护之心",
 "祭水之人"};
 
-typedef struct
+typedef struct tag
 {
     char name[11];
     double value;
 } tag;
 
-typedef struct
+typedef struct relic
 {
     char setname[10];
     char position[7];
